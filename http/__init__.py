@@ -122,6 +122,7 @@ class BaseServer(dict, object, metaclass=RequestMetaClass):
                 self.response = await response.text()
             return self.unserialize()
 
+
 """
 class TestServer(BaseServer):
     URL = 'http://www.baidu.com'

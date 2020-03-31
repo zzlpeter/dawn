@@ -1,6 +1,6 @@
-from mysql import Engines
 import peewee
-import asyncio
+
+from mysql import Engines
 
 
 class DouYinUser(peewee.Model):
@@ -11,13 +11,8 @@ class DouYinUser(peewee.Model):
     class Meta:
         database = Engines().default.db_conn
         db_table = 'dy_user'
-        # manager =
 
-async def test():
+
+async def create_user():
     objects = Engines().default.manager
     await objects.create(DouYinUser, username='peter1', password='pwd')
-
-if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(test())
-    loop.close()

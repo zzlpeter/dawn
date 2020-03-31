@@ -1,0 +1,40 @@
+# 数据库配置
+[database]
+    [database.mysql]
+        [database.mysql.default]
+            host = '127.0.0.1'
+            port = 3306
+            user = 'root'
+            password = ''
+            db = 'douyin'
+            max_connections = 10  # 最大链接数
+            is_async = False  # 是否异步（默认同步）
+        [database.mysql.dawn]
+            host = '127.0.0.1'
+            port = 3306
+            user = 'root'
+            password = '123456'
+            db = 'dawn'
+            max_connections = 10
+            is_async = True
+    [database.redis]
+        [database.redis.default]
+            host = '127.0.0.1'
+            port = 6379
+            db = 1
+            password = ''
+
+# 日志配置
+[logger]
+    [logger.root]
+        filename = '/data/logs/root.log'
+        maxBytes = 1024 * 1024 * 100 # 文件大小为100M
+        backupCount = 5 # 备份份数
+    [logger.other]
+        filename = '/data/logs/other.log'
+        maxBytes = 1024 * 1024 * 100 # 文件大小为100M
+        backupCount = 5 # 备份份数
+
+# 基本信息配置
+[basic]
+

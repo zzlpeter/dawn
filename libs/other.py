@@ -18,15 +18,19 @@ __all__ = [
     'DesSecret',
     'gen_uuid',
     'md5',
-    'gen_auto_increment_id'
+    'gen_auto_increment_id',
+    'dict2obj'
 ]
 
 
-def singleton(cls):
+def singleton(cls, *args, **kwargs):
+    """
+    类单例模式
+    """
     instance = dict()
 
     @wraps(cls)
-    def wrapper(*args, **kwargs):
+    def wrapper():
         if cls not in instance:
             instance[cls] = cls(*args, **kwargs)
         return instance[cls]
@@ -34,6 +38,10 @@ def singleton(cls):
 
 
 def func_cache(func):
+    """
+    方法执行成功 -> 缓存结果
+    异常之后直接raise、不缓存
+    """
     cache_dict = dict()
 
     @wraps(func)
@@ -49,13 +57,15 @@ def func_cache(func):
 
 class Host:
     """
-    >>> host = Host()
-    >>> host.host_ip
+    获取本机IP/HOSTNAME
+    >>> Host().host_ip()
+    >>> 172.25.4.68
+    >>> Host.host_ip()
     >>> 172.25.4.68
     """
-    @property
+    @staticmethod
     @func_cache
-    def host_ip(self):
+    def host_ip():
         """
         查询本机ip地址
         """
@@ -68,9 +78,9 @@ class Host:
             s.close()
             return ip
 
-    @property
+    @staticmethod
     @func_cache
-    def host_name(self):
+    def host_name():
         """
         查询本机hostname
         """
@@ -86,8 +96,13 @@ class Host:
 
 class Environ:
     """
+    设置/读取环境变量
     >>> env = Environ()
     >>> env.PYTHON_ENV = 'PRO'
+    >>> env.PYTHON_ENV
+    >>> 'PRO'
+    >>> env.PYTHON_ENV_NEW
+    >>> None
     """
     def __setattr__(self, env, value):
         os.environ[env] = value
@@ -148,11 +163,21 @@ def md5(string):
 
 
 def gen_auto_increment_id():
+    """
+    随时间自增的ID
+    """
     stamp = str(time.time() * 100000)
     rt = str(random.randint(0, 10000))
     rt.zfill(5)
     return f'{stamp}{rt}'
 
-if __name__ == '__main__':
-    print(Host.host_ip)
-    print(Host().host_ip)
+
+def dict2obj(mapper: dict) -> object:
+    """
+    字典转对象
+    """
+    class Obj:
+        pass
+    for k, v in mapper.items():
+        setattr(Obj, k, v)
+    return Obj
