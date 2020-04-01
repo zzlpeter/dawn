@@ -6,6 +6,7 @@ from libs import singleton, dict2obj
 
 @singleton
 class Engines:
+    # 获取MySQL配置信息
     mysql_conf = Config().mysql
 
     def __init__(self):
@@ -18,6 +19,7 @@ class Engines:
             if not bool(is_async):
                 db_conn.set_allow_sync(False)
             manager = peewee_async.Manager(db_conn)
+            # 每个链接对象有两个属性：.db_conn  .manager
             self.engines[alias] = dict2obj(dict(db_conn=db_conn, manager=manager))
 
     def get_engine(self, alias):
@@ -27,6 +29,9 @@ class Engines:
 
     def __getattr__(self, alias):
         return self.get_engine(alias)
+
+
+EnginesEntity = Engines()
 
 
 # class AppRouter:

@@ -1,6 +1,6 @@
 import peewee
 
-from mysql import Engines
+from mysql import EnginesEntity
 
 
 class DouYinUser(peewee.Model):
@@ -9,10 +9,10 @@ class DouYinUser(peewee.Model):
     password = peewee.CharField()
 
     class Meta:
-        database = Engines().default.db_conn
+        database = EnginesEntity.default.db_conn
         db_table = 'dy_user'
 
 
 async def create_user():
-    objects = Engines().default.manager
+    objects = EnginesEntity.default.manager
     await objects.create(DouYinUser, username='peter1', password='pwd')

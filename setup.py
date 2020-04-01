@@ -1,23 +1,24 @@
-from mysql import Engines
-import peewee
-import asyncio
+import os
+from setuptools import setup, find_packages
 
 
-class DouYinUser(peewee.Model):
-    id = peewee.IntegerField()
-    username = peewee.CharField()
-    password = peewee.CharField()
+install_requires = [line.rstrip() for line in open(os.path.join(os.path.dirname(__file__), "requirements.txt"))]
 
-    class Meta:
-        database = Engines().default.db_conn
-        db_table = 'dy_user'
-        # manager =
 
-async def test():
-    objects = Engines().default.manager
-    await objects.create(DouYinUser, username='peter1', password='pwd')
-
-if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(test())
-    loop.close()
+setup(
+    name='dawn',
+    version='0.1.0',
+    author='zhangzhiliang',
+    author_email='823515849@qq.com',
+    description='',
+    long_description='',
+    url='https://github.com/zzlpeter/dawn',
+    packages=find_packages(),
+    ext_modules=[],
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'Programming Language :: Python :: 3',
+    ],
+    install_requires=install_requires,
+)
