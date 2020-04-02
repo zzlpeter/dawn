@@ -1,17 +1,28 @@
+"""
+MySQL连接池管理
+"""
 import peewee_async
 
 from tomlconfig import Config
 from libs import singleton, dict2obj
 
 
+__all__ = [
+    'MysqlPools'
+]
+
+
 @singleton
-class Engines:
-    # 获取MySQL配置信息
-    mysql_conf = Config().mysql
+class Mysql:
+    mysql_pools = {}
 
     def __init__(self):
-        self.engines = dict()
-        for alias, cnf in self.mysql_conf.items():
+        pass
+
+    def create_pool(self):
+        _mysql_pools = {}
+        mysql_conf = Config().mysql
+        for alias, cnf in mysql_conf.items():
             db = cnf.pop('db')
             is_async = cnf.pop('is_async', False)
             db_conn = peewee_async.PooledMySQLDatabase(db, **cnf)
@@ -20,18 +31,25 @@ class Engines:
                 db_conn.set_allow_sync(False)
             manager = peewee_async.Manager(db_conn)
             # 每个链接对象有两个属性：.db_conn  .manager
-            self.engines[alias] = dict2obj(dict(db_conn=db_conn, manager=manager))
+            _mysql_pools[alias] = dict2obj(dict(db_conn=db_conn, manager=manager))
+        self.mysql_pools = _mysql_pools
 
-    def get_engine(self, alias):
-        if alias not in self.engines:
-            raise Exception('alias: <{}> is not found from conf file'.format(alias))
-        return self.engines[alias]
-
-    def __getattr__(self, alias):
-        return self.get_engine(alias)
+    @property
+    def pools(self):
+        if not self.mysql_pools:
+            self.create_pool()
+        return self.mysql_pools
 
 
-EnginesEntity = Engines()
+@singleton
+class MysqlWrapper:
+    pools = Mysql().pools
+
+    def __getattr__(self, key):
+        return self.pools.get(key)
+
+
+MysqlPools = MysqlWrapper()
 
 
 # class AppRouter:

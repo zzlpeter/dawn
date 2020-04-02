@@ -30,9 +30,9 @@ def singleton(cls, *args, **kwargs):
     instance = dict()
 
     @wraps(cls)
-    def wrapper():
+    def wrapper(*a, **kw):
         if cls not in instance:
-            instance[cls] = cls(*args, **kwargs)
+            instance[cls] = cls(*a, **kw)
         return instance[cls]
     return wrapper
 
@@ -172,12 +172,13 @@ def gen_auto_increment_id():
     return f'{stamp}{rt}'
 
 
-def dict2obj(mapper: dict) -> object:
+def dict2obj(mapper: dict = None) -> object:
     """
     字典转对象
     """
     class Obj:
         pass
-    for k, v in mapper.items():
-        setattr(Obj, k, v)
+    if isinstance(mapper, dict):
+        for k, v in mapper.items():
+            setattr(Obj, k, v)
     return Obj

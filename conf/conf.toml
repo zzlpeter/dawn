@@ -21,4 +21,14 @@
             host = '127.0.0.1'
             port = 6379
             db = 1
-            password = ''
+            maxsize = 10
+# 日志配置
+[logger]
+    [logger.root]
+        filename = '/Users/zhangzhiliang/data0/logs/root.log'
+        maxBytes = 1024100 # 文件大小为100M
+        backupCount = 5 # 备份份数
+    [logger.other]
+        filename = '/Users/zhangzhiliang/data0/logs/other.log'
+        maxBytes = 1024100 # 文件大小为100M
+        backupCount = 5 # 备份份数

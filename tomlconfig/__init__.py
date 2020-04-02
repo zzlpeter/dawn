@@ -40,3 +40,10 @@ class Config:
     @property
     def logger(self):
         return self.__conf.get('logger', {})
+
+    def other(self, section):
+        return self.__conf.get(section, None)
+
+    @property
+    def conf(self):
+        return self.__conf

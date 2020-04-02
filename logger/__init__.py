@@ -151,5 +151,9 @@ logger_conf = LoggerConf().make_full_conf()
 logging.config.dictConfig(logger_conf)
 
 
-def get_logger(item):
-    return logging.getLogger(item)
+class LoggerWrap:
+    def __getattr__(self, key):
+        return logging.getLogger(key)
+
+
+LoggerPool = LoggerWrap()

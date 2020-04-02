@@ -1,7 +1,7 @@
 import traceback
-from logger import get_logger
+from logger import LoggerPool
 
-other_logger = get_logger('other')
+other_logger = LoggerPool.other
 
 
 def test_log():
